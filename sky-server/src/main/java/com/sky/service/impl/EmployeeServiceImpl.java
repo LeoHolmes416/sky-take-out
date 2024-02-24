@@ -1,7 +1,9 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -9,17 +11,24 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
+import com.sky.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * 员工登录
@@ -55,6 +64,38 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    /**
+     * 新增员工
+     * @param employeeDTO
+     */
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+
+        Employee employee = new Employee();
+        //对象属性拷贝,从数据源拷贝到目标数据存储地点,前提是属性名称必须一致
+        BeanUtils.copyProperties(employeeDTO,employee);
+        //设置帐号状态，1 默认正常 0 锁定。为避免硬编码，使用状态常量类StatusConstant
+        employee.setStatus(StatusConstant.ENABLE);
+        //设置默认密码常量123456,并且在存储前进行md5加密
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        //设置创建时间
+        employee.setCreateTime(LocalDateTime.now());
+        //设置修改时间
+        employee.setUpdateTime(LocalDateTime.now());
+        //设置当前记录的创建人id (从token解析）
+        employee.setCreateUser(10L);
+        // TODO 通过解析token返回操作者ID
+        /*
+        String jwt = request.getHeader("token");
+        Claims claims = JwtUtil.parseJWT(jwt);  //存放自定义数据为一个map集合
+        Integer operateUser = (Integer) claims.get("id"); //强转
+         */
+        //设置当前记录的修改人id
+        employee.setUpdateUser(10L);
+        employeeMapper.insert(employee);
+
     }
 
 }
