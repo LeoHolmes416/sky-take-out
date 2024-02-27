@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
@@ -73,6 +74,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void save(EmployeeDTO employeeDTO) {
 
+        System.out.println("当前线程id: " + Thread.currentThread().getId());
+
         Employee employee = new Employee();
         //对象属性拷贝,从数据源拷贝到目标数据存储地点,前提是属性名称必须一致
         BeanUtils.copyProperties(employeeDTO,employee);
@@ -84,16 +87,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateTime(LocalDateTime.now());
         //设置修改时间
         employee.setUpdateTime(LocalDateTime.now());
-        //设置当前记录的创建人id (从token解析）
-        employee.setCreateUser(10L);
-        // TODO 通过解析token返回操作者ID
+
+        //TODO 设置当前记录的创建人id (从线程获取拦截器中定义的线程变量：token解析得到的用户id）
+        employee.setCreateUser(BaseContext.getCurrentId());
         /*
         String jwt = request.getHeader("token");
         Claims claims = JwtUtil.parseJWT(jwt);  //存放自定义数据为一个map集合
         Integer operateUser = (Integer) claims.get("id"); //强转
          */
         //设置当前记录的修改人id
-        employee.setUpdateUser(10L);
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
         employeeMapper.insert(employee);
 
     }

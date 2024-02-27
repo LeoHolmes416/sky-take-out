@@ -33,7 +33,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     @Autowired
-    private JwtProperties jwtProperties;
+    private JwtProperties jwtProperties;  //jwt配置类
 
     /**
      * 登录
@@ -49,17 +49,17 @@ public class EmployeeController {
 
         //登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
+        claims.put(JwtClaimsConstant.EMP_ID, employee.getId()); //claims放入员工id
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
-                claims);
+                claims);  //调用配置类，配置token令牌，包括管理员密钥，管理员jwt有效时间，claims(jwt第二部分payload中负载的内容)
 
-        EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()
-                .id(employee.getId())
+        EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()  //员工登录后返回的数据体(回显)构建
+                .id(employee.getId())  //此处的id只是回显的
                 .userName(employee.getUsername())
                 .name(employee.getName())
-                .token(token)
+                .token(token)  //token中的id是伴随着整个用户线程的
                 .build();
 
         return Result.success(employeeLoginVO);
@@ -84,6 +84,7 @@ public class EmployeeController {
     @ApiOperation(value ="新增员工")  //描述方法
     public Result save(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工: {}",employeeDTO);
+        System.out.println("当前线程id: " + Thread.currentThread().getId());
         employeeService.save(employeeDTO);
         return Result.success();
     }
