@@ -26,6 +26,7 @@ import org.springframework.util.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -116,7 +117,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         //开始分页查询,参数：1.当前页码 2.每页条数
         PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
         Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO); //查询结果封装为page类
-        return null;
+
+        long total = page.getTotal();   //结果总数
+        List<Employee> records = page.getResult();  //结果集合
+
+        return new PageResult(total,records);
     }
 
 }

@@ -5,10 +5,10 @@
 
     <!--动态条件查询，resultType代表的是单条结果的数据类型-->
     <select id="pageQuery" resultType="com.sky.entity.Employee">
-        select * fom employee
+        select * from employee
         <where>
             <if test="name != null and name != ''">
-                name like concat('%', #{name}, '%')  <!--姓名模糊查询-->
+                and name like concat('%', #{name}, '%')  <!--姓名模糊查询-->
             </if>
         </where>
         order by create_time desc   <!--创建时间降序排列-->
