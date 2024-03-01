@@ -35,4 +35,10 @@ public interface EmployeeMapper {
      */
     //动态sql需要标签，不采用注解方式开发
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 根据主键(id)动态修改员工属性
+     * @param employee
+     */
+    void update(Employee employee);
 }

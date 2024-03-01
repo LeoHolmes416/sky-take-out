@@ -69,7 +69,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
-    @ApiOperation(value ="员工登录")  //描述方法
+    @ApiOperation(value ="员工登出")  //描述方法
     public Result<String> logout() {
         return Result.success();
     }
@@ -98,6 +98,18 @@ public class EmployeeController {
         log.info("员工分页查询，输入值为: {}",employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 修改员工登陆状态
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
+    public Result startOrStop(@PathVariable("status") Integer status, long id){  //使用路径参数
+        log.info("启用或禁用员工号,0禁用1启用: {},{}",status,id);
+        employeeService.startOrStop(status,id);
+        return Result.success();
     }
 
 }
