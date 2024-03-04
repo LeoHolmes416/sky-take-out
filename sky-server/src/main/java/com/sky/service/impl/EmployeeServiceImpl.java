@@ -143,4 +143,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);  //根据传入的数据类型，进行动态更新
     }
 
+    /**
+     * 根据id回显员工信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee getById(long id) {
+        Employee employee = employeeMapper.getById(id);
+        employee.setPassword("****");   //对回显密码进行手动加密
+        return employee;
+    }
+
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        // employeeMapper.update(employee); 需要进行类型强转，将employeeDTO转化为employee类型
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);  //对象属性拷贝
+        employee.setUpdateTime(LocalDateTime.now());     //加入修改时间和修改人
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
+
+    }
+
 }
