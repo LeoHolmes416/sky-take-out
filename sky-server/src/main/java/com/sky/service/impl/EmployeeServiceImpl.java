@@ -88,20 +88,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatus(StatusConstant.ENABLE);
         //设置默认密码常量123456,并且在存储前进行md5加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+
         //设置创建时间
-        employee.setCreateTime(LocalDateTime.now());
+        //employee.setCreateTime(LocalDateTime.now());
         //设置修改时间
-        employee.setUpdateTime(LocalDateTime.now());
+        //employee.setUpdateTime(LocalDateTime.now());
 
         //TODO 设置当前记录的创建人id (从线程获取拦截器中定义的线程变量：token解析得到的用户id）
-        employee.setCreateUser(BaseContext.getCurrentId());
+        //employee.setCreateUser(BaseContext.getCurrentId());
         /*
         String jwt = request.getHeader("token");
         Claims claims = JwtUtil.parseJWT(jwt);  //存放自定义数据为一个map集合
         Integer operateUser = (Integer) claims.get("id"); //强转
          */
         //设置当前记录的修改人id
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //employee.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.insert(employee);
 
@@ -164,8 +165,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         // employeeMapper.update(employee); 需要进行类型强转，将employeeDTO转化为employee类型
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);  //对象属性拷贝
-        employee.setUpdateTime(LocalDateTime.now());     //加入修改时间和修改人
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //employee.setUpdateTime(LocalDateTime.now());     //加入修改时间和修改人
+        //employee.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.update(employee);
 
