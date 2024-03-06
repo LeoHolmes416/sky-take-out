@@ -1,8 +1,10 @@
+# 个人配置 数据库地址 阿里云oss服务器地址
 server:
   port: 8080
 
 spring:
   profiles:
+    # 配置文件为 application-dev 开发环境
     active: dev
   main:
     allow-circular-references: true
@@ -38,6 +40,11 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+  alioss:
+    # oss服务器路径名称
+    endpoint: ${sky.alioss.endpoint}
+    # oss Bucket名称
+    bucket-name: ${sky.alioss.bucket-name}
 
 pagehelper:
   # 分页合理化参数，当选择页码大于所有数据值造成页面空白时，自动返回最后一页的数据
