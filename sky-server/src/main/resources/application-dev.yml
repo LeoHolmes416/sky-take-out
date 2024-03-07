@@ -7,5 +7,5 @@ sky:
     username: root
     password: root
   alioss:
-    endpoint: https://oss-cn-beijing.aliyuncs.com
+    endpoint: oss-cn-beijing.aliyuncs.com
     bucket-name: leo416-web-tlias

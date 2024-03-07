@@ -49,8 +49,8 @@ public class EmployeeController {
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId()); //claims放入员工id
         String token = JwtUtil.createJWT(
-                jwtProperties.getAdminSecretKey(),
-                jwtProperties.getAdminTtl(),
+                jwtProperties.getAdminSecretKey(),  //jwt密钥
+                jwtProperties.getAdminTtl(),   //jwt持续时间
                 claims);  //调用配置类，配置token令牌，包括管理员密钥，管理员jwt有效时间，claims(jwt第二部分payload中负载的内容)
 
         EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder()  //员工登录后返回的数据体(回显)构建

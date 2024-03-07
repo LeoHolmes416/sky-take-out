@@ -52,7 +52,7 @@ public class AutoFillAspect {
 
         // 3.根据不同的操作类型，为实体对象的一些公共属性赋值
         LocalDateTime now = LocalDateTime.now();     //操作时间
-        Long currentId = BaseContext.getCurrentId();  //操作人
+        Long currentId = BaseContext.getCurrentId();  //获取线程ID，操作人
         if(operationType == OperationType.INSERT){
             //插入操作，为四个公共字段赋值（创建时间，更新时间，创建人，更新人），使用反射赋值
             try {
