@@ -10,4 +10,21 @@
         values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser},
                 #{updateUser}, #{status})
     </insert>
+    <!--动态条件查询，resultType代表的是单条结果的数据类型-->
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+        <!--使用左外连接，返回所有菜品以及他们对应的种类(包括没有种类的菜品)-->
+        select d.* , c.name as categoryName from dish d left join category c on d.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                and d.name like concat('%', #{name}, '%')  <!--名称模糊查询-->
+            </if>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
 </mapper>
