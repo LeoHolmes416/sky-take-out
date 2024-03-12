@@ -4,5 +4,11 @@
 <mapper namespace="com.sky.mapper.DishFlavorMapper">
 
     <!--动态插入口味数据到菜品-口味表中-->
-    <insert id="insertBatch"></insert>
+    <insert id="insertBatch">
+        insert into dish_flavor(dish_id, name, value) values
+        <!--遍历,得到口味list flavors 中的每一条数据并命名为df 分隔符为，-->
+        <foreach collection="flavors" item="df" separator=",">
+            (#{df.dishId},#{df.name},#{df.value})
+        </foreach>
+    </insert>
 </mapper>
